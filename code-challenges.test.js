@@ -168,11 +168,15 @@ const sumArray = (array) => {
   // return array.map((value) => {     //Initial logic process was to map over the array and then add each element value to the previous sum.
   //   return sum = 0, sum += value     //While this logic worked in theory, it ended up giving me incorrect values. 
   // })
-  return array.reduce((sum, currentNum, index) =>     //Setup reducer function with sum, currentNum and index parameters
-    [...sum, currentNum + (sum[index - 1] || 0)], []) //Adding currentNum to sum of each previous value at each index
+  // return array.map((sum =>     //setting up the sum function 
+  //    value => sum += value) (0)   //setting up the .map function, sum will be appended to each value as map iterates through the array. Initialize sum to 0
+  // )
+  // return array.reduce((sum, currentNum, index) =>     //Setup reducer function with sum, currentNum and index parameters
+  //   [...sum, currentNum + (sum[index - 1] || 0)], []) //Adding currentNum to sum of each previous value at each index
+  // return array.reduce((sum, curValue) => sum + curValue, 0)
 }
 //Test logs to verify array had correct output values
-// console.log(sumArray(accountTransactions1))
+console.log(sumArray(accountTransactions1))
 // console.log(sumArray(accountTransactions2))
 // console.log(sumArray(accountTransactions3))
 
