@@ -6,6 +6,12 @@
 
 <!-- HINT: Check the console in the browser developer tools for errors. The lines numbers may not match up exactly with the line numbers in your text editor. -->
 
+<!--Notes-->
+<!-- 3 bugs within the return of the App component -->
+<!-- 1. The JSX fragment pieces were missing. <></> VS Code could not recognize any of the code within the return because it was not incased in JSX.  -->
+<!-- 2. Line 82, the button onClick did not receive a parameter inside the {}. Without an attribute passed, in this case it was the drawCard method, when clicking the button, the function would not execute as intended.  -->
+<!-- 3. Line 85, the onclick was incorrectly written. onClick needs to be written in camelCase because its within JSX fragments.  -->
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
@@ -27,30 +33,30 @@
     <script type="text/babel">
 
       // file: src/App.js
-      const { useState } = React
+      const { useState } = React    //Importing useState
 
-      const App = () => {
+      const App = () => {           //App component function
 
-        const suit = ["❤️", "♦️", "♠️", "♣️"]
-        const rank = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]
-        const [hand, setHand] = useState([])
+        const suit = ["❤️", "♦️", "♠️", "♣️"]   //array of suits(card suits)
+        const rank = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]   //array of rnkas(card ranks)
+        const [hand, setHand] = useState([])    //creating initial useState, empty array
 
-        const drawCard = () => {
-          let draw = `${rank[Math.floor(Math.random() * rank.length)]} ${suit[Math.floor(Math.random() * suit.length)]}`
-          if(hand.indexOf(draw) === -1) {
-            setHand([...hand, draw])
-          } else if(hand.length !== 52) {
-            drawCard()
-          } else {
-            alert("All cards have been dealt.")
+        const drawCard = () => {  //function to draw a card
+          let draw = `${rank[Math.floor(Math.random() * rank.length)]} ${suit[Math.floor(Math.random() * suit.length)]}`  //set draw to a randomized rank and suit from each array
+          if(hand.indexOf(draw) === -1) { //if no values found in each array, aka card does not exist
+            setHand([...hand, draw])      //reset useState by copying the original empty array and resetting draw variable
+          } else if(hand.length !== 52) { //if the hand does not exceed 52 cards
+            drawCard()                    //keep drawing cards
+          } else {                        //catch-all
+            alert("All cards have been dealt.") //Alert box on browser appears telling user all cards have been drawn
           }
         }
 
-        const shuffle = () => {
-          setHand([])
+        const shuffle = () => {   //function to shuffle cards
+          setHand([])             //resetting the hand, aka resetting the useState with an empty array
         }
 
-        const handStyles = {
+        const handStyles = {                  //Lines 59-70 CSS for cards
           display: "flex",
           flexDirection: "row",
           flexWrap: "wrap"
@@ -65,22 +71,24 @@
         // No need to change anything ABOVE this line ^
 
         return (
-          <h1>Draw a Card</h1>
-          <button onClick={}>
+          <>  {/*Error 1*/}
+          <h1>Draw a Card</h1>        {/*Header line on page*/}
+          <button onClick={drawCard}>  {/*Error 2*/} {/*Lines 70-72 Button on page to draw a card*/}
             Click to Draw a Card
           </button>
-          <button onclick={shuffle}>
+          <button onClick={shuffle}>   {/*Error 3*/} {/*Lines 73-75 Button on page to return cards and shuffle deck*/}
             Return Cards and Shuffle Deck
           </button>
-          <div style={handStyles}>
-            {hand.map((card, index) => {
-              return (
-                <div style={cardStyles} key={index}>
-                  {card}
+        <div style={handStyles}>      {/*Container for cards to appear, style attribute included to reference CSS in lines 53-57*/}
+            {hand.map((card, index) => {  //Using .map to make each card appear on the page
+              return (                    //.map return
+                <div style={cardStyles} key={index}>  {/*Container for cards to appear, style attribute included to reference CSS in lines 58-64. Also, passing key and referencing index.*/}
+                  {card}          {/*Card is the value to log each card onto the screen when clicking button to draw a card*/}
                 </div>
               )
             })}
           </div>
+          </>
         )
       }
 
@@ -88,7 +96,7 @@
 
       const domContainer = document.querySelector('#react-container')
       const root = ReactDOM.createRoot(domContainer)
-      root.render(<App />)
+      root.render(<App />)                //Rendering App component
     </script>
   </body>
 </html>
